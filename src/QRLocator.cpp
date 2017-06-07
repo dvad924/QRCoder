@@ -1,7 +1,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc.hpp>
-#include "./qr.h"
+#include "./QRLocator.h"
 #include <vector>
 #include <math.h>
 
@@ -174,8 +174,7 @@ namespace qr{
     cv::circle(dst,boarders.at(2),3,cv::Scalar(0,0,255));
     cv::circle(dst,boarders.at(0),3,cv::Scalar(0,255,0));
     finders = boarders;
-    cv::imshow("QR Code", dst);
-    cv::waitKey(3000);  
+
   }
   void QRLocator::createPatchFrame(){
     patch = cv::Mat(300,300,CV_8UC1);
@@ -191,26 +190,14 @@ namespace qr{
     srcPoints[0] = finders.at(0); //corner
     srcPoints[1] = finders.at(1); //bottom
     srcPoints[2] = finders.at(2); //right
-    cv::Point2f v1 = srcPoints[0] - srcPoints[1];
-    cv::Point2f v2 = srcPoints[0] - srcPoints[2];
-    double v1l = cv::norm(v1);
-    double v2l = cv::norm(v2);
-    v1.x /= v1l;
-    v1.y /= v1l;
-    v2.x /= v2l;
-    v2.y /= v2l;
-    cv::Point2f dir = v1 + v2;
-    double theoretical = atan2(-1,-1)*180/M_PI;
-    double pos = atan2(dir.y, dir.x) * 180/M_PI;
-    std::cout << theoretical << " , " << pos << std::endl;
 
-    double rotangle = theoretical - pos;
-    //cv::Mat rotmat = cv::getRotationMatrix2D(, rotangle, 1)
     warpMat = cv::getAffineTransform(srcPoints,dstPoints);
     
     cv::warpAffine(img,temp,warpMat,cv::Size(300,300));
-    cv::imshow("QR Code", temp);
-    cv::waitKey(3000);
+    patch = temp.clone();
   }
-  
+
+  cv::Mat QRLocator::getQRFrame(){
+    return patch;
+  }
 }

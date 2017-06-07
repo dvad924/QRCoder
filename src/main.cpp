@@ -1,15 +1,15 @@
 #include <opencv2/opencv.hpp>
 #include <stdio.h>
 #include <iostream>
-#include "./qr.h"
-
+#include "./QRLocator.h"
+#include "./QRParser.h"
 using namespace std;
 
 int main(){
 
 
   cv::Mat image;
-  image = cv::imread( "/Users/dvad/Desktop/exampleqr.jpg",1);
+  image = cv::imread( "/Users/dvad/Desktop/exampleqr2.jpg",1);
 
   if ( !image.data ){
     cout << "No image data" << endl;
@@ -22,9 +22,10 @@ int main(){
   
   cv::waitKey(1000);
   qrLoc.convertBW();
-  
   qrLoc.locateFinders();
-
   qrLoc.createPatchFrame();
+  qr::QRParser parser(qrLoc.getQRFrame());
+  parser.descretizeQR();
+    
   return 0;
 }

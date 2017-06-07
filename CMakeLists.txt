@@ -4,7 +4,8 @@ project(qr-reader)
 find_package(OpenCV REQUIRED)
 
 add_executable(reader src/main.cpp
-                      src/qr.cpp)
+                      src/QRLocator.cpp
+                      src/QRParser.cpp)
 
 target_link_libraries(reader ${OpenCV_LIBS})
 set_property(TARGET reader PROPERTY CXX_STANDARD 11)

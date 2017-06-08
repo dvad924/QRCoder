@@ -7,6 +7,7 @@ namespace qr{
     cv::Mat _qr;
     double _pheight;
     double _pwidth;
+    cv::Mat _code;
   public:
     QRParser(cv::Mat qrcode);
     ~QRParser();
